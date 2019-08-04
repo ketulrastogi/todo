@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/models/db.dart';
 import 'package:todo/services/todo.dart';
+import 'package:todo/ui/flushbar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -95,19 +96,21 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               try {
                 todoService.deleteTodo(todo);
-                Flushbar(
-                  title: "SUCCESS",
-                  message: "Succesfully deleted a todo item.",
-                  duration: Duration(seconds: 3),
-                  backgroundColor: Colors.green,
-                )..show(context);
+                showFlushbar(context, 'SUCCESS', 'Succesfully deleted a todo item.', Colors.green);
+                // Flushbar(
+                //   title: "SUCCESS",
+                //   message: "Succesfully deleted a todo item.",
+                //   duration: Duration(seconds: 3),
+                //   backgroundColor: Colors.green,
+                // )..show(context);
               } catch (e) {
-                Flushbar(
-                  title: "ERROR",
-                  message: "Error occured while deleting a todo item.",
-                  duration: Duration(seconds: 3),
-                  backgroundColor: Colors.red,
-                )..show(context);
+                showFlushbar(context, 'ERROR', 'Error occured while deleting a todo item.', Colors.red);
+                // Flushbar(
+                //   title: "ERROR",
+                //   message: "Error occured while deleting a todo item.",
+                //   duration: Duration(seconds: 3),
+                //   backgroundColor: Colors.red,
+                // )..show(context);
               }
             })
       ],
@@ -116,12 +119,13 @@ class _HomePageState extends State<HomePage> {
           try {
             todoService.updateTodo(todo.copyWith(completed: !todo.completed));
           } catch (e) {
-            Flushbar(
-              title: "ERROR",
-              message: "Error occured while changing status of a todo item.",
-              duration: Duration(seconds: 3),
-              backgroundColor: Colors.red,
-            )..show(context);
+            showFlushbar(context, 'ERROR', 'Error occured while changing status of a todo item.', Colors.red);
+            // Flushbar(
+            //   title: "ERROR",
+            //   message: "Error occured while changing status of a todo item.",
+            //   duration: Duration(seconds: 3),
+            //   backgroundColor: Colors.red,
+            // )..show(context);
           }
         },
         splashColor: Colors.pink[50],
@@ -169,6 +173,7 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.w400),
                     ),
                   ),
+                  
                 ],
               ),
             ],
@@ -259,26 +264,32 @@ class _HomePageState extends State<HomePage> {
                         Todo todo = Todo(
                             title: this.title,
                             description: this.description,
-                            completed: true);
-                        titleController.text = '';
-                        descriptionController.text = '';
+                            createdDate: DateTime.now(),
+                            );
+                        
                         Navigator.pop(context);
                         try {
                           todoService.insertTodo(todo);
-                          Flushbar(
-                            title: "SUCCESS",
-                            message: "Succesfully added a todo item.",
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Colors.green,
-                          )..show(context);
+                          setState(() {
+                            titleController.text = '';
+                            descriptionController.text = '';
+                          });
+                          showFlushbar(context, 'SUCCESS', 'Succesfully added a todo item.', Colors.green);
+                          // Flushbar(
+                          //   title: "SUCCESS",
+                          //   message: "Succesfully added a todo item.",
+                          //   duration: Duration(seconds: 3),
+                          //   backgroundColor: Colors.green,
+                          // )..show(context);
                         } catch (e) {
                           print(e);
-                          Flushbar(
-                            title: "ERROR",
-                            message: "Error occured while adding a todo item.",
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Colors.red,
-                          )..show(context);
+                          showFlushbar(context, 'ERROR', 'Error occured while adding a todo item.', Colors.red);
+                          // Flushbar(
+                          //   title: "ERROR",
+                          //   message: "Error occured while adding a todo item.",
+                          //   duration: Duration(seconds: 3),
+                          //   backgroundColor: Colors.red,
+                          // )..show(context);
                         }
                       }
                     },
@@ -390,21 +401,23 @@ class _HomePageState extends State<HomePage> {
                             titleController.text = '';
                             descriptionController.text = '';
                           });
-                          Flushbar(
-                            title: "SUCCESS",
-                            message: "Succesfully updated a todo item.",
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Colors.green,
-                          )..show(context);
+                          showFlushbar(context, 'SUCCESS', 'Succesfully updated a todo item.', Colors.green);
+                          // Flushbar(
+                          //   title: "SUCCESS",
+                          //   message: "Succesfully updated a todo item.",
+                          //   duration: Duration(seconds: 3),
+                          //   backgroundColor: Colors.green,
+                          // )..show(context);
                         } catch (e) {
                           print(e);
-                          Flushbar(
-                            title: "ERROR",
-                            message:
-                                "Error occured while updating a todo item.",
-                            duration: Duration(seconds: 3),
-                            backgroundColor: Colors.red,
-                          )..show(context);
+                          showFlushbar(context, 'ERROR', 'Error occured while updating a todo item.', Colors.red);
+                          // Flushbar(
+                          //   title: "ERROR",
+                          //   message:
+                          //       "Error occured while updating a todo item.",
+                          //   duration: Duration(seconds: 3),
+                          //   backgroundColor: Colors.red,
+                          // )..show(context);
                         }
                       }
                     },

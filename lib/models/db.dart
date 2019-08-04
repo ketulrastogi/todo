@@ -17,15 +17,14 @@ class Todos extends Table {
   TextColumn get description => text().withLength(min: 1, max: 200)();
   // DateTime is not natively supported by SQLite
   // Moor converts it to & from UNIX seconds
-  DateTimeColumn get createdDate => dateTime().nullable()();
+  DateTimeColumn get createdDate =>
+      dateTime()();
   // Booleans are not supported as well, Moor converts them to integers
   // Simple default values are specified as Constants
   BoolColumn get completed => boolean().withDefault(Constant(false))();
 
   // @override
   // Set<Column> get primaryKey => {title};
-
-  
 
 }
 
@@ -50,7 +49,9 @@ class AppDatabase extends _$AppDatabase {
   Future<List<Todo>> getAllTodos() => select(todos).get();
 
   // Moor supports Streams which emit elements when the watched data changes
-  Stream<List<Todo>> watchAllTodos() => select(todos).watch();
+  Stream<List<Todo>> watchAllTodos() => (select(todos)..orderBy(([
+        (t) => OrderingTerm(expression: t.createdDate, mode: OrderingMode.desc)
+      ]))).watch();
 
   Future insertTodo(Todo todo) => into(todos).insert(todo);
 
